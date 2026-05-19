@@ -1,0 +1,644 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --c-primary: #1a3a8f;
+    --c-primary-light: #e8eef8;
+    --c-primary-mid: #2a50c0;
+    --c-accent: #d4782a;
+    --c-accent-light: #fef3e8;
+    --c-red: #c0392b;
+    --c-red-light: #fdecea;
+    --c-text: var(--color-text-primary);
+    --c-muted: var(--color-text-secondary);
+    --c-bg: var(--color-background-primary);
+    --c-bg2: var(--color-background-secondary);
+    --c-border: var(--color-border-tertiary);
+  }
+  #app {
+    font-family: 'Tajawal', sans-serif;
+    direction: rtl;
+    text-align: right;
+    color: var(--c-text);
+    max-width: 680px;
+    background: transparent;
+  }
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 4px;
+    border-bottom: 2px solid var(--c-primary-light);
+    margin-bottom: 8px;
+  }
+  .logo-box {
+    width: 48px; height: 48px;
+    background: #1a3a8f;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .logo-box svg { width: 38px; height: 38px; }
+  .sidebar-nav {
+    display: flex;
+    gap: 6px;
+    padding: 8px 0;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--c-border);
+    background: var(--c-bg);
+    color: var(--c-muted);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .nav-btn.active {
+    background: var(--c-primary);
+    color: #fff;
+    border-color: var(--c-primary);
+    font-weight: 500;
+  }
+  .nav-btn:hover:not(.active) { background: var(--c-bg2); }
+  .page { display: none; }
+  .page.active { display: block; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--c-bg2);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .stat-card .icon { width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px; }
+  .stat-card .label { font-size:12px;color:var(--c-muted);margin-bottom:4px; }
+  .stat-card .value { font-size:22px;font-weight:700;line-height:1; }
+  .stat-card .sub { font-size:11px;color:var(--c-muted);margin-top:4px; }
+  .stat-blue .icon { background:#d6e8f5;color:#1a3a8f; }
+  .stat-blue .value { color:#1a3a8f; }
+  .stat-amber .icon { background:#fde8cc;color:var(--c-accent); }
+  .stat-amber .value { color:var(--c-accent); }
+  .stat-green .icon { background:#d4edda;color:#1a6b3a; }
+  .stat-green .value { color:#1a6b3a; }
+  .stat-red .icon { background:#fdd;color:var(--c-red); }
+  .stat-red .value { color:var(--c-red); }
+  .section-title {
+    font-size:15px;font-weight:700;margin-bottom:10px;padding-bottom:6px;
+    border-bottom:1.5px solid var(--c-primary-light);color:var(--c-primary);
+    display:flex;align-items:center;gap:6px;
+  }
+  .card {
+    background:var(--c-bg);border:0.5px solid var(--c-border);
+    border-radius:12px;padding:14px;margin-bottom:12px;
+  }
+  table { width:100%;border-collapse:collapse;font-size:13px; }
+  th { background:var(--c-primary-light);color:var(--c-primary);padding:8px 10px;font-weight:600;font-size:12px; }
+  th:first-child { border-radius:0 8px 8px 0; }
+  th:last-child { border-radius:8px 0 0 8px; }
+  td { padding:9px 10px;border-bottom:0.5px solid var(--c-border); }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:var(--c-bg2); }
+  .badge { display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600; }
+  .badge-green { background:#d4edda;color:#155724; }
+  .badge-amber { background:#fff3cd;color:#856404; }
+  .badge-red { background:#fdd;color:#721c24; }
+  .badge-blue { background:#d6e8f5;color:#0c5460; }
+  .btn { padding:8px 16px;border-radius:8px;border:none;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;font-weight:600;transition:all .15s; }
+  .btn-primary { background:var(--c-primary);color:#fff; }
+  .btn-primary:hover { background:var(--c-primary-mid); }
+  .btn-outline { background:transparent;border:1px solid var(--c-primary);color:var(--c-primary); }
+  .btn-outline:hover { background:var(--c-primary-light); }
+  .btn-danger { background:var(--c-red);color:#fff; }
+  .form-row { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px; }
+  .form-row-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px; }
+  .form-group label { font-size:12px;font-weight:600;color:var(--c-muted);display:block;margin-bottom:4px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%;padding:9px 11px;border:1px solid var(--c-border);
+    border-radius:8px;font-family:'Tajawal',sans-serif;font-size:13px;
+    background:var(--c-bg);color:var(--c-text);direction:rtl;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline:none;border-color:var(--c-primary);box-shadow:0 0 0 3px rgba(26,58,143,0.08);
+  }
+  .form-group textarea { resize:vertical;min-height:70px; }
+  .form-group input[readonly] { background:var(--c-bg2);cursor:default; }
+  .required { color:var(--c-red); }
+  .chart-bar-wrap { display:flex;flex-direction:column;gap:6px; }
+  .chart-bar-row { display:flex;align-items:center;gap:8px;font-size:12px; }
+  .chart-bar-label { width:90px;color:var(--c-muted);text-align:right;flex-shrink:0; }
+  .chart-bar-track { flex:1;height:20px;background:var(--c-bg2);border-radius:6px;overflow:hidden; }
+  .chart-bar-fill { height:100%;border-radius:6px;display:flex;align-items:center;padding-right:8px;font-size:11px;font-weight:700;color:#fff;justify-content:flex-end; }
+  .profit-row { display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--c-border);font-size:13px; }
+  .profit-row:last-child { border-bottom:none; }
+  .profit-label { color:var(--c-muted); }
+  .profit-value { font-weight:700; }
+  .pos { color:#1a6b3a; }
+  .neg { color:var(--c-red); }
+  .alert-box { padding:10px 14px;border-radius:8px;font-size:13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:8px; }
+  .alert-warn { background:#fff8e1;color:#7b5e00;border-right:3px solid #f6c200; }
+  .alert-info { background:var(--c-primary-light);color:var(--c-primary);border-right:3px solid var(--c-primary); }
+  .alert-danger { background:var(--c-red-light);color:var(--c-red);border-right:3px solid var(--c-red); }
+  .mini-stat-row { display:flex;gap:8px;margin-bottom:12px; }
+  .mini-stat { flex:1;background:var(--c-bg2);border-radius:8px;padding:10px;text-align:center; }
+  .mini-stat .mv { font-size:16px;font-weight:700; }
+  .mini-stat .ml { font-size:11px;color:var(--c-muted);margin-top:2px; }
+  .header-bar { display:flex;justify-content:space-between;align-items:center;margin-bottom:12px; }
+  .empty-state { text-align:center;padding:32px 16px;color:var(--c-muted); }
+  .empty-state .ei { font-size:40px;margin-bottom:8px; }
+  .empty-state .et { font-size:14px;font-weight:600;margin-bottom:4px; }
+  .empty-state .es { font-size:12px; }
+  .form-section { background:var(--c-primary-light);border:1.5px solid var(--c-primary);border-radius:12px;padding:14px;margin-bottom:12px; }
+  .form-section .section-title { border-bottom-color:rgba(26,58,143,0.2); }
+  .saved-row { display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--c-bg2);border-radius:8px;margin-bottom:6px;font-size:13px; }
+  .saved-row .sr-info { flex:1; }
+  .saved-row .sr-actions { display:flex;gap:6px; }
+  .btn-sm { padding:4px 10px;font-size:12px;border-radius:6px; }
+  .tab-row { display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--c-border);padding-bottom:8px; }
+  .tab { padding:6px 14px;border-radius:8px 8px 0 0;border:none;background:transparent;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;color:var(--c-muted); }
+  .tab.active { background:var(--c-primary-light);color:var(--c-primary);font-weight:700; }
+  .success-msg { background:#d4edda;color:#155724;border:1px solid #b8dfc4;border-radius:8px;padding:10px 14px;font-size:13px;display:none;margin-bottom:10px; }
+</style>
+
+<div id="app">
+  <!-- Header -->
+  <div class="top-bar">
+    <div class="logo-box">
+      <!-- K1 logo recreation in SVG -->
+      <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+        <rect width="38" height="38" fill="#1a3a8f"/>
+        <polygon points="7,8 14,8 14,17 22,8 30,8 20,19 30,30 22,30 14,21 14,30 7,30" fill="white"/>
+        <polygon points="25,8 31,8 31,30 25,30 25,22 28,19 25,16" fill="white" opacity="0.85"/>
+      </svg>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:700;color:var(--c-primary)">مزرعة القاضي للإنتاج الحيواني</div>
+      <div style="font-size:11px;color:var(--c-muted)">NM for Agr. Development and Animal Prod. (ALKADY)</div>
+    </div>
+    <div style="margin-right:auto">
+      <span class="badge badge-blue">● نظام فعّال</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">🏠 الرئيسية</button>
+    <button class="nav-btn" onclick="showPage('cattle',this)">🐄 المواشي</button>
+    <button class="nav-btn" onclick="showPage('feed',this)">🌾 العلف</button>
+    <button class="nav-btn" onclick="showPage('sales',this)">🧾 المبيعات</button>
+    <button class="nav-btn" onclick="showPage('expenses',this)">💸 المصروفات</button>
+    <button class="nav-btn" onclick="showPage('reports',this)">📊 التقارير</button>
+  </nav>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="page-dashboard" class="page active">
+    <div class="stat-grid" id="dash-stats">
+      <div class="stat-card stat-blue"><div class="icon">🐄</div><div class="label">إجمالي المواشي</div><div class="value" id="ds-cattle">0</div><div class="sub">رأس مسجّل</div></div>
+      <div class="stat-card stat-amber"><div class="icon">💰</div><div class="label">إجمالي المبيعات</div><div class="value" id="ds-sales" style="font-size:15px">0</div><div class="sub">جنيه مصري</div></div>
+      <div class="stat-card stat-red"><div class="icon">📉</div><div class="label">إجمالي المصروفات</div><div class="value" id="ds-exp" style="font-size:15px">0</div><div class="sub">جنيه مصري</div></div>
+      <div class="stat-card stat-green"><div class="icon">📈</div><div class="label">صافي الربح</div><div class="value" id="ds-profit" style="font-size:15px">0</div><div class="sub">جنيه مصري</div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">🚀 ابدأ بإدخال بياناتك</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <button class="btn btn-primary" onclick="showPage('cattle',document.querySelectorAll('.nav-btn')[1])" style="padding:14px;font-size:13px;border-radius:10px">🐄<br><span style="font-size:11px;font-weight:400">أضف مواشي</span></button>
+        <button class="btn btn-outline" onclick="showPage('feed',document.querySelectorAll('.nav-btn')[2])" style="padding:14px;font-size:13px;border-radius:10px">🌾<br><span style="font-size:11px;font-weight:400">سجّل علف</span></button>
+        <button class="btn btn-outline" onclick="showPage('sales',document.querySelectorAll('.nav-btn')[3])" style="padding:14px;font-size:13px;border-radius:10px">🧾<br><span style="font-size:11px;font-weight:400">أضف مبيعات</span></button>
+      </div>
+    </div>
+    <div class="card" id="recent-activity">
+      <div class="section-title">📋 آخر النشاطات</div>
+      <div class="empty-state"><div class="ei">📭</div><div class="et">لا توجد بيانات بعد</div><div class="es">ابدأ بإضافة مواشي أو تسجيل مبيعات</div></div>
+    </div>
+  </div>
+
+  <!-- ===== CATTLE ===== -->
+  <div id="page-cattle" class="page">
+    <div class="header-bar">
+      <div class="section-title" style="margin:0">🐄 المواشي والعجول</div>
+      <button class="btn btn-primary" onclick="toggleForm('cattle-form')">+ إضافة مواشي</button>
+    </div>
+
+    <div id="cattle-form" style="display:none">
+      <div class="form-section">
+        <div class="section-title">إضافة دفعة جديدة</div>
+        <div class="tab-row">
+          <button class="tab active" onclick="switchCattleTab('batch',this)">دفعة جماعية</button>
+          <button class="tab" onclick="switchCattleTab('single',this)">رأس واحد</button>
+        </div>
+        <!-- Batch -->
+        <div id="cattle-batch">
+          <div class="form-row-3">
+            <div class="form-group"><label>عدد الرؤوس <span class="required">*</span></label><input type="number" id="c-cnt" placeholder="مثال: 20" min="1" oninput="calcCattlePrice()"></div>
+            <div class="form-group"><label>السعر الإجمالي (جنيه) <span class="required">*</span></label><input type="number" id="c-total" placeholder="مثال: 500000" oninput="calcCattlePrice()"></div>
+            <div class="form-group"><label>سعر الرأس الواحد</label><input id="c-perhead" readonly placeholder="يُحسب تلقائياً"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>النوع <span class="required">*</span></label><select id="c-type"><option value="">-- اختر --</option><option>عجل بلدي</option><option>عجل فريزيان</option><option>عجل بلدي خلط</option><option>عجل جاموسي</option><option>بقرة حلوب</option></select></div>
+            <div class="form-group"><label>متوسط الوزن (كجم)</label><input type="number" id="c-weight" placeholder="مثال: 200"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>المورد</label><input type="text" id="c-supplier" placeholder="اسم المورد أو المزرعة"></div>
+            <div class="form-group"><label>تاريخ الشراء <span class="required">*</span></label><input type="date" id="c-date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>الحالة الصحية</label><select id="c-health"><option>سليم</option><option>يحتاج متابعة</option><option>تحت العلاج</option></select></div>
+            <div class="form-group"><label>دورة التسمين</label><input type="text" id="c-cycle" placeholder="مثال: دورة يونيو 2025"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:10px"><label>ملاحظات</label><textarea id="c-notes" placeholder="أي ملاحظات إضافية..."></textarea></div>
+        </div>
+        <!-- Single -->
+        <div id="cattle-single" style="display:none">
+          <div class="form-row">
+            <div class="form-group"><label>كود / رقم العجل <span class="required">*</span></label><input type="text" id="cs-code" placeholder="مثال: A-001"></div>
+            <div class="form-group"><label>النوع <span class="required">*</span></label><select id="cs-type"><option value="">-- اختر --</option><option>عجل بلدي</option><option>عجل فريزيان</option><option>عجل بلدي خلط</option><option>عجل جاموسي</option></select></div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label>الوزن (كجم)</label><input type="number" id="cs-weight" placeholder="180"></div>
+            <div class="form-group"><label>سعر الشراء (جنيه)</label><input type="number" id="cs-price" placeholder="25000"></div>
+            <div class="form-group"><label>سعر الكيلو (جنيه)</label><input type="number" id="cs-kgprice" placeholder="138"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>المورد</label><input type="text" id="cs-supplier" placeholder="اسم المورد"></div>
+            <div class="form-group"><label>تاريخ الشراء</label><input type="date" id="cs-date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>الحالة الصحية</label><select id="cs-health"><option>سليم</option><option>يحتاج متابعة</option><option>تحت العلاج</option></select></div>
+            <div class="form-group"><label>دورة التسمين</label><input type="text" id="cs-cycle" placeholder="دورة يونيو 2025"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:10px"><label>ملاحظات</label><textarea id="cs-notes" placeholder="وصف / ملاحظات..."></textarea></div>
+        </div>
+        <div id="cattle-success" class="success-msg">✅ تم حفظ البيانات بنجاح!</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="saveCattle()">✓ حفظ</button>
+          <button class="btn btn-outline" onclick="toggleForm('cattle-form')">إلغاء</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cattle-list"></div>
+  </div>
+
+  <!-- ===== FEED ===== -->
+  <div id="page-feed" class="page">
+    <div class="header-bar">
+      <div class="section-title" style="margin:0">🌾 العلف والتغذية</div>
+      <button class="btn btn-primary" onclick="toggleForm('feed-form')">+ تسجيل علف</button>
+    </div>
+    <div id="feed-form" style="display:none">
+      <div class="form-section">
+        <div class="section-title">إضافة صرف علف</div>
+        <div class="form-row">
+          <div class="form-group"><label>نوع العلف <span class="required">*</span></label><select id="f-type"><option value="">-- اختر --</option><option>دريس برسيم</option><option>تبن قمح</option><option>كسب صويا</option><option>ردة قمح</option><option>ذرة صفراء</option><option>سيلاج</option><option>كسر أرز</option><option>أخرى</option></select></div>
+          <div class="form-group"><label>الكمية (كجم) <span class="required">*</span></label><input type="number" id="f-qty" placeholder="500" oninput="calcFeedCost()"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>سعر الكيلو (جنيه)</label><input type="number" id="f-price" placeholder="3.20" step="0.01" oninput="calcFeedCost()"></div>
+          <div class="form-group"><label>التكلفة الإجمالية</label><input id="f-cost" readonly placeholder="تلقائي"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>التاريخ <span class="required">*</span></label><input type="date" id="f-date"></div>
+          <div class="form-group"><label>الوجبة</label><select id="f-meal"><option>صباح</option><option>ظهر</option><option>مساء</option><option>يومي</option></select></div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px"><label>ملاحظات</label><input type="text" id="f-notes" placeholder="ملاحظات اختيارية"></div>
+        <div id="feed-success" class="success-msg">✅ تم تسجيل العلف!</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="saveFeed()">✓ حفظ</button>
+          <button class="btn btn-outline" onclick="toggleForm('feed-form')">إلغاء</button>
+        </div>
+      </div>
+    </div>
+    <div id="feed-list"></div>
+  </div>
+
+  <!-- ===== SALES ===== -->
+  <div id="page-sales" class="page">
+    <div class="header-bar">
+      <div class="section-title" style="margin:0">🧾 المبيعات والعملاء</div>
+      <button class="btn btn-primary" onclick="toggleForm('sale-form')">+ فاتورة جديدة</button>
+    </div>
+    <div id="sale-form" style="display:none">
+      <div class="form-section" style="border-color:var(--c-accent);background:var(--c-accent-light)">
+        <div class="section-title" style="color:var(--c-accent);border-bottom-color:rgba(212,120,42,0.2)">إنشاء فاتورة بيع</div>
+        <div class="form-row">
+          <div class="form-group"><label>اسم العميل <span class="required">*</span></label><input type="text" id="s-name" placeholder="اسم العميل أو الشركة"></div>
+          <div class="form-group"><label>رقم الهاتف</label><input type="text" id="s-phone" placeholder="01xxxxxxxxx"></div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group"><label>عدد الرؤوس</label><input type="number" id="s-cnt" placeholder="5" oninput="calcSale()"></div>
+          <div class="form-group"><label>الوزن الإجمالي (كجم) <span class="required">*</span></label><input type="number" id="s-weight" placeholder="1500" oninput="calcSale()"></div>
+          <div class="form-group"><label>سعر الكيلو (جنيه) <span class="required">*</span></label><input type="number" id="s-kgprice" placeholder="145" oninput="calcSale()"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>إجمالي الفاتورة</label><input id="s-total" readonly placeholder="يُحسب تلقائياً" style="font-weight:700;font-size:14px;color:var(--c-primary)"></div>
+          <div class="form-group"><label>تاريخ البيع <span class="required">*</span></label><input type="date" id="s-date"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>طريقة الدفع</label><select id="s-pay"><option>كاش</option><option>تحويل بنكي</option><option>شيك</option><option>آجل</option></select></div>
+          <div class="form-group"><label>حالة السداد</label><select id="s-status"><option>مدفوع</option><option>معلق</option><option>متأخر</option></select></div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px"><label>ملاحظات</label><input type="text" id="s-notes" placeholder="ملاحظات اختيارية"></div>
+        <div id="sale-success" class="success-msg">✅ تم حفظ الفاتورة!</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="saveSale()">✓ حفظ الفاتورة</button>
+          <button class="btn btn-outline" onclick="toggleForm('sale-form')">إلغاء</button>
+        </div>
+      </div>
+    </div>
+    <div id="sale-list"></div>
+  </div>
+
+  <!-- ===== EXPENSES ===== -->
+  <div id="page-expenses" class="page">
+    <div class="header-bar">
+      <div class="section-title" style="margin:0">💸 المصروفات</div>
+      <button class="btn btn-primary" onclick="toggleForm('exp-form')">+ مصروف جديد</button>
+    </div>
+    <div id="exp-form" style="display:none">
+      <div class="form-section" style="border-color:var(--c-red);background:var(--c-red-light)">
+        <div class="section-title" style="color:var(--c-red);border-bottom-color:rgba(192,57,43,0.2)">تسجيل مصروف</div>
+        <div class="form-row">
+          <div class="form-group"><label>نوع المصروف <span class="required">*</span></label>
+            <select id="e-type"><option value="">-- اختر --</option><option>علف</option><option>دواء / تطعيم</option><option>عمالة ورواتب</option><option>نقل وشحن</option><option>كهرباء</option><option>مياه</option><option>إيجار</option><option>صيانة</option><option>مصروفات أخرى</option></select>
+          </div>
+          <div class="form-group"><label>المبلغ (جنيه) <span class="required">*</span></label><input type="number" id="e-amount" placeholder="5000"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>التاريخ <span class="required">*</span></label><input type="date" id="e-date"></div>
+          <div class="form-group"><label>المورد / الجهة</label><input type="text" id="e-vendor" placeholder="اسم المورد أو الجهة"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px"><label>وصف / ملاحظة</label><input type="text" id="e-notes" placeholder="تفاصيل المصروف"></div>
+        <div id="exp-success" class="success-msg">✅ تم حفظ المصروف!</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="saveExpense()">✓ حفظ</button>
+          <button class="btn btn-outline" onclick="toggleForm('exp-form')">إلغاء</button>
+        </div>
+      </div>
+    </div>
+    <div id="exp-list"></div>
+  </div>
+
+  <!-- ===== REPORTS ===== -->
+  <div id="page-reports" class="page">
+    <div class="section-title">📊 التقارير والإحصائيات</div>
+    <div class="card" id="report-pl">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <b style="font-size:14px">تقرير الأرباح والخسائر</b>
+      </div>
+      <div id="report-pl-body"><div class="empty-state"><div class="ei">📊</div><div class="et">أدخل بياناتك أولاً</div><div class="es">ستظهر التقارير هنا تلقائياً بعد إدخال المبيعات والمصروفات</div></div></div>
+    </div>
+    <div class="card">
+      <b style="font-size:14px">📋 ملخص المواشي</b>
+      <div id="report-cattle-summary" style="margin-top:10px"><div class="empty-state"><div class="ei">🐄</div><div class="et">لا توجد مواشي مسجّلة</div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let db = { cattle: [], feed: [], sales: [], expenses: [] };
+
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'reports') renderReports();
+  if (name === 'dashboard') updateDashboard();
+}
+
+function toggleForm(id) {
+  const f = document.getElementById(id);
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function switchCattleTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cattle-batch').style.display = tab === 'batch' ? 'block' : 'none';
+  document.getElementById('cattle-single').style.display = tab === 'single' ? 'block' : 'none';
+}
+
+function calcCattlePrice() {
+  const cnt = +document.getElementById('c-cnt').value || 0;
+  const total = +document.getElementById('c-total').value || 0;
+  if (cnt > 0 && total > 0)
+    document.getElementById('c-perhead').value = Math.round(total / cnt).toLocaleString('ar-EG') + ' ج';
+}
+
+function calcFeedCost() {
+  const qty = +document.getElementById('f-qty').value || 0;
+  const price = +document.getElementById('f-price').value || 0;
+  if (qty > 0 && price > 0)
+    document.getElementById('f-cost').value = (qty * price).toLocaleString('ar-EG') + ' ج';
+}
+
+function calcSale() {
+  const w = +document.getElementById('s-weight').value || 0;
+  const p = +document.getElementById('s-kgprice').value || 0;
+  if (w > 0 && p > 0)
+    document.getElementById('s-total').value = (w * p).toLocaleString('ar-EG') + ' ج';
+}
+
+function showSuccess(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+function saveCattle() {
+  const isBatch = document.getElementById('cattle-batch').style.display !== 'none';
+  if (isBatch) {
+    const cnt = +document.getElementById('c-cnt').value;
+    const total = +document.getElementById('c-total').value;
+    const type = document.getElementById('c-type').value;
+    const date = document.getElementById('c-date').value;
+    if (!cnt || !total || !type || !date) { alert('يرجى تعبئة الحقول المطلوبة *'); return; }
+    db.cattle.push({ id: Date.now(), batch: true, cnt, total, perHead: Math.round(total/cnt), type, weight: document.getElementById('c-weight').value, supplier: document.getElementById('c-supplier').value, date, health: document.getElementById('c-health').value, cycle: document.getElementById('c-cycle').value, notes: document.getElementById('c-notes').value });
+    document.getElementById('c-cnt').value=''; document.getElementById('c-total').value=''; document.getElementById('c-perhead').value=''; document.getElementById('c-type').value=''; document.getElementById('c-weight').value=''; document.getElementById('c-supplier').value=''; document.getElementById('c-date').value=''; document.getElementById('c-notes').value=''; document.getElementById('c-cycle').value='';
+  } else {
+    const code = document.getElementById('cs-code').value;
+    const type = document.getElementById('cs-type').value;
+    if (!code || !type) { alert('يرجى تعبئة الحقول المطلوبة *'); return; }
+    db.cattle.push({ id: Date.now(), batch: false, code, type, weight: document.getElementById('cs-weight').value, price: document.getElementById('cs-price').value, kgprice: document.getElementById('cs-kgprice').value, supplier: document.getElementById('cs-supplier').value, date: document.getElementById('cs-date').value, health: document.getElementById('cs-health').value, cycle: document.getElementById('cs-cycle').value, notes: document.getElementById('cs-notes').value });
+    document.getElementById('cs-code').value=''; document.getElementById('cs-type').value=''; document.getElementById('cs-weight').value=''; document.getElementById('cs-price').value=''; document.getElementById('cs-kgprice').value=''; document.getElementById('cs-supplier').value=''; document.getElementById('cs-date').value=''; document.getElementById('cs-notes').value=''; document.getElementById('cs-cycle').value='';
+  }
+  showSuccess('cattle-success');
+  renderCattleList();
+  updateDashboard();
+}
+
+function saveFeed() {
+  const type = document.getElementById('f-type').value;
+  const qty = +document.getElementById('f-qty').value;
+  const date = document.getElementById('f-date').value;
+  if (!type || !qty || !date) { alert('يرجى تعبئة الحقول المطلوبة *'); return; }
+  const price = +document.getElementById('f-price').value || 0;
+  db.feed.push({ id: Date.now(), type, qty, price, cost: qty * price, date, meal: document.getElementById('f-meal').value, notes: document.getElementById('f-notes').value });
+  document.getElementById('f-type').value=''; document.getElementById('f-qty').value=''; document.getElementById('f-price').value=''; document.getElementById('f-cost').value=''; document.getElementById('f-date').value=''; document.getElementById('f-notes').value='';
+  showSuccess('feed-success');
+  renderFeedList();
+}
+
+function saveSale() {
+  const name = document.getElementById('s-name').value;
+  const weight = +document.getElementById('s-weight').value;
+  const kgprice = +document.getElementById('s-kgprice').value;
+  const date = document.getElementById('s-date').value;
+  if (!name || !weight || !kgprice || !date) { alert('يرجى تعبئة الحقول المطلوبة *'); return; }
+  const total = weight * kgprice;
+  db.sales.push({ id: Date.now(), name, phone: document.getElementById('s-phone').value, cnt: document.getElementById('s-cnt').value, weight, kgprice, total, date, pay: document.getElementById('s-pay').value, status: document.getElementById('s-status').value, notes: document.getElementById('s-notes').value });
+  document.getElementById('s-name').value=''; document.getElementById('s-phone').value=''; document.getElementById('s-cnt').value=''; document.getElementById('s-weight').value=''; document.getElementById('s-kgprice').value=''; document.getElementById('s-total').value=''; document.getElementById('s-date').value=''; document.getElementById('s-notes').value='';
+  showSuccess('sale-success');
+  renderSaleList();
+  updateDashboard();
+}
+
+function saveExpense() {
+  const type = document.getElementById('e-type').value;
+  const amount = +document.getElementById('e-amount').value;
+  const date = document.getElementById('e-date').value;
+  if (!type || !amount || !date) { alert('يرجى تعبئة الحقول المطلوبة *'); return; }
+  db.expenses.push({ id: Date.now(), type, amount, date, vendor: document.getElementById('e-vendor').value, notes: document.getElementById('e-notes').value });
+  document.getElementById('e-type').value=''; document.getElementById('e-amount').value=''; document.getElementById('e-date').value=''; document.getElementById('e-vendor').value=''; document.getElementById('e-notes').value='';
+  showSuccess('exp-success');
+  renderExpList();
+  updateDashboard();
+}
+
+function deleteItem(list, id, renderFn) {
+  db[list] = db[list].filter(x => x.id !== id);
+  renderFn();
+  updateDashboard();
+}
+
+function healthBadge(h) {
+  if (h === 'سليم') return '<span class="badge badge-green">سليم</span>';
+  if (h === 'تحت العلاج') return '<span class="badge badge-red">تحت العلاج</span>';
+  return '<span class="badge badge-amber">يحتاج متابعة</span>';
+}
+
+function renderCattleList() {
+  const el = document.getElementById('cattle-list');
+  if (!db.cattle.length) { el.innerHTML = '<div class="empty-state"><div class="ei">🐄</div><div class="et">لا توجد مواشي مسجّلة</div><div class="es">اضغط "إضافة مواشي" للبدء</div></div>'; return; }
+  let total = 0;
+  db.cattle.forEach(c => { total += c.batch ? c.cnt : 1; });
+  el.innerHTML = `<div class="mini-stat-row"><div class="mini-stat"><div class="mv" style="color:var(--c-primary)">${total}</div><div class="ml">إجمالي الرؤوس</div></div><div class="mini-stat"><div class="mv" style="color:var(--c-accent)">${db.cattle.length}</div><div class="ml">عدد الدفعات</div></div></div>
+  <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>النوع</th><th>العدد/الكود</th><th>التكلفة</th><th>المورد</th><th>الصحة</th><th>التاريخ</th><th></th></tr></thead><tbody>` +
+  db.cattle.map(c => `<tr>
+    <td>${c.type}</td>
+    <td>${c.batch ? c.cnt + ' رأس' : c.code || '—'}</td>
+    <td class="neg">${c.batch ? c.total.toLocaleString('ar-EG') + ' ج' : (c.price ? (+c.price).toLocaleString('ar-EG') + ' ج' : '—')}</td>
+    <td>${c.supplier || '—'}</td>
+    <td>${healthBadge(c.health)}</td>
+    <td>${c.date || '—'}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteItem('cattle',${c.id},renderCattleList)">🗑</button></td>
+  </tr>`).join('') + '</tbody></table></div>';
+}
+
+function renderFeedList() {
+  const el = document.getElementById('feed-list');
+  if (!db.feed.length) { el.innerHTML = '<div class="empty-state"><div class="ei">🌾</div><div class="et">لا توجد سجلات علف</div></div>'; return; }
+  const totalCost = db.feed.reduce((s, f) => s + f.cost, 0);
+  el.innerHTML = `<div class="mini-stat-row"><div class="mini-stat"><div class="mv neg">${totalCost.toLocaleString('ar-EG')}</div><div class="ml">إجمالي تكلفة العلف (ج)</div></div></div>
+  <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>النوع</th><th>الكمية</th><th>التكلفة</th><th>الوجبة</th><th>التاريخ</th><th></th></tr></thead><tbody>` +
+  db.feed.map(f => `<tr>
+    <td>${f.type}</td><td>${f.qty} كجم</td>
+    <td class="neg">${f.cost ? f.cost.toLocaleString('ar-EG') + ' ج' : '—'}</td>
+    <td>${f.meal}</td><td>${f.date}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteItem('feed',${f.id},renderFeedList)">🗑</button></td>
+  </tr>`).join('') + '</tbody></table></div>';
+}
+
+function statusBadge(s) {
+  if (s === 'مدفوع') return '<span class="badge badge-green">مدفوع</span>';
+  if (s === 'متأخر') return '<span class="badge badge-red">متأخر</span>';
+  return '<span class="badge badge-amber">معلق</span>';
+}
+
+function renderSaleList() {
+  const el = document.getElementById('sale-list');
+  if (!db.sales.length) { el.innerHTML = '<div class="empty-state"><div class="ei">🧾</div><div class="et">لا توجد فواتير</div></div>'; return; }
+  const totalSales = db.sales.reduce((s, x) => s + x.total, 0);
+  el.innerHTML = `<div class="mini-stat-row"><div class="mini-stat"><div class="mv pos">${totalSales.toLocaleString('ar-EG')}</div><div class="ml">إجمالي المبيعات (ج)</div></div><div class="mini-stat"><div class="mv" style="color:var(--c-primary)">${db.sales.length}</div><div class="ml">عدد الفواتير</div></div></div>
+  <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>العميل</th><th>الوزن</th><th>سعر الكيلو</th><th>الإجمالي</th><th>الدفع</th><th>الحالة</th><th></th></tr></thead><tbody>` +
+  db.sales.map(s => `<tr>
+    <td><b>${s.name}</b><br><span style="font-size:11px;color:var(--c-muted)">${s.phone || ''}</span></td>
+    <td>${s.weight} كجم</td><td>${s.kgprice} ج</td>
+    <td class="pos">${s.total.toLocaleString('ar-EG')} ج</td>
+    <td>${s.pay}</td><td>${statusBadge(s.status)}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteItem('sales',${s.id},renderSaleList)">🗑</button></td>
+  </tr>`).join('') + '</tbody></table></div>';
+}
+
+function renderExpList() {
+  const el = document.getElementById('exp-list');
+  if (!db.expenses.length) { el.innerHTML = '<div class="empty-state"><div class="ei">💸</div><div class="et">لا توجد مصروفات مسجّلة</div></div>'; return; }
+  const totalExp = db.expenses.reduce((s, e) => s + e.amount, 0);
+  el.innerHTML = `<div class="mini-stat-row"><div class="mini-stat"><div class="mv neg">${totalExp.toLocaleString('ar-EG')}</div><div class="ml">إجمالي المصروفات (ج)</div></div></div>
+  <div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>النوع</th><th>المبلغ</th><th>الجهة</th><th>التاريخ</th><th>ملاحظة</th><th></th></tr></thead><tbody>` +
+  db.expenses.map(e => `<tr>
+    <td>${e.type}</td><td class="neg">${e.amount.toLocaleString('ar-EG')} ج</td>
+    <td>${e.vendor || '—'}</td><td>${e.date}</td><td style="font-size:11px;color:var(--c-muted)">${e.notes || '—'}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteItem('expenses',${e.id},renderExpList)">🗑</button></td>
+  </tr>`).join('') + '</tbody></table></div>';
+}
+
+function updateDashboard() {
+  let totalCattle = db.cattle.reduce((s, c) => s + (c.batch ? c.cnt : 1), 0);
+  let totalSales = db.sales.reduce((s, x) => s + x.total, 0);
+  let totalExp = db.expenses.reduce((s, e) => s + e.amount, 0);
+  let feedCost = db.feed.reduce((s, f) => s + f.cost, 0);
+  let cattleCost = db.cattle.reduce((s, c) => s + (c.batch ? c.total : (+c.price||0)), 0);
+  let allExp = totalExp + feedCost + cattleCost;
+  let profit = totalSales - allExp;
+  document.getElementById('ds-cattle').textContent = totalCattle;
+  document.getElementById('ds-sales').textContent = totalSales.toLocaleString('ar-EG');
+  document.getElementById('ds-exp').textContent = allExp.toLocaleString('ar-EG');
+  const profEl = document.getElementById('ds-profit');
+  profEl.textContent = profit.toLocaleString('ar-EG');
+  profEl.style.color = profit >= 0 ? '#1a6b3a' : 'var(--c-red)';
+  const act = document.getElementById('recent-activity');
+  const all = [...db.cattle.map(c=>({t:'cattle',d:c.date||'',label:`${c.batch?c.cnt+' رأس ':c.code+' '} ${c.type}`,sub:'مواشي'})), ...db.sales.map(s=>({t:'sale',d:s.date,label:s.name,sub:`${s.total.toLocaleString('ar-EG')} ج`})), ...db.expenses.map(e=>({t:'exp',d:e.date,label:e.type,sub:`${e.amount.toLocaleString('ar-EG')} ج`}))].sort((a,b)=>b.d.localeCompare(a.d)).slice(0,5);
+  if (!all.length) { act.innerHTML='<div class="section-title">📋 آخر النشاطات</div><div class="empty-state"><div class="ei">📭</div><div class="et">لا توجد بيانات بعد</div></div>'; return; }
+  act.innerHTML='<div class="section-title">📋 آخر النشاطات</div>'+all.map(a=>`<div class="saved-row"><span style="font-size:20px">${a.t==='cattle'?'🐄':a.t==='sale'?'🧾':'💸'}</span><div class="sr-info"><div style="font-size:13px;font-weight:600">${a.label}</div><div style="font-size:11px;color:var(--c-muted)">${a.d} • ${a.sub}</div></div></div>`).join('');
+}
+
+function renderReports() {
+  let totalSales = db.sales.reduce((s, x) => s + x.total, 0);
+  let totalExp = db.expenses.reduce((s, e) => s + e.amount, 0);
+  let feedCost = db.feed.reduce((s, f) => s + f.cost, 0);
+  let cattleCost = db.cattle.reduce((s, c) => s + (c.batch ? c.total : (+c.price||0)), 0);
+  let allExp = totalExp + feedCost + cattleCost;
+  let profit = totalSales - allExp;
+  const plBody = document.getElementById('report-pl-body');
+  if (!totalSales && !allExp) { plBody.innerHTML='<div class="empty-state"><div class="ei">📊</div><div class="et">أدخل بياناتك أولاً</div></div>'; }
+  else {
+    plBody.innerHTML = `
+      <div class="profit-row"><span class="profit-label">إجمالي الإيرادات (المبيعات)</span><span class="profit-value pos">+${totalSales.toLocaleString('ar-EG')} ج</span></div>
+      <div class="profit-row"><span class="profit-label">تكلفة شراء المواشي</span><span class="profit-value neg">-${cattleCost.toLocaleString('ar-EG')} ج</span></div>
+      <div class="profit-row"><span class="profit-label">تكلفة العلف</span><span class="profit-value neg">-${feedCost.toLocaleString('ar-EG')} ج</span></div>
+      <div class="profit-row"><span class="profit-label">المصروفات الأخرى</span><span class="profit-value neg">-${totalExp.toLocaleString('ar-EG')} ج</span></div>
+      <div class="profit-row" style="background:${profit>=0?'var(--c-primary-light)':'var(--c-red-light)'};border-radius:8px;padding:10px;border-bottom:none;margin-top:6px">
+        <span style="font-weight:700;color:${profit>=0?'var(--c-primary)':'var(--c-red)'}">صافي الربح / الخسارة</span>
+        <span style="font-weight:700;font-size:16px;color:${profit>=0?'var(--c-primary)':'var(--c-red)'}">${profit>=0?'+':''}${profit.toLocaleString('ar-EG')} ج</span>
+      </div>`;
+  }
+  const cs = document.getElementById('report-cattle-summary');
+  if (!db.cattle.length) { cs.innerHTML='<div class="empty-state"><div class="ei">🐄</div><div class="et">لا توجد مواشي مسجّلة</div></div>'; return; }
+  let total = db.cattle.reduce((s,c)=>s+(c.batch?c.cnt:1),0);
+  let cost = db.cattle.reduce((s,c)=>s+(c.batch?c.total:(+c.price||0)),0);
+  cs.innerHTML = `<div class="mini-stat-row"><div class="mini-stat"><div class="mv" style="color:var(--c-primary)">${total}</div><div class="ml">إجمالي الرؤوس</div></div><div class="mini-stat"><div class="mv neg">${cost.toLocaleString('ar-EG')}</div><div class="ml">إجمالي تكلفة الشراء (ج)</div></div></div>`;
+}
+
+// Init
+renderCattleList(); renderFeedList(); renderSaleList(); renderExpList();
+</script>
